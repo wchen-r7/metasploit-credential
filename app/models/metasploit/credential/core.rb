@@ -118,14 +118,23 @@ class Metasploit::Credential::Core < ActiveRecord::Base
                 scope: [
                     :workspace_id,
                     :public_id,
+                    :realm_id,
                 ]
             },
-            if: 'private.present? && public.present?'
+            if: 'private.present? && public.present? && realm.present?'
+  validates :private_id,
+            uniqueness: {
+                scope: [
+                    :workspace_id,
+                    :public_id,
+                ]
+            },
+            if: 'private.present? && public.present? && realm.nil?'
   validates :private_id,
             uniqueness: {
                 scope: :workspace_id
             },
-            if: 'private.present? && public.nil?'
+            if: 'private.present? && public.nil? && realm.nil?'
   validates :public_id,
             uniqueness: {
                 scope: :workspace_id
